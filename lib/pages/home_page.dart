@@ -50,45 +50,76 @@ class _HomePageState extends State<HomePage> {
 
           final textColor = isDarkMode ? Colors.black : Colors.white;
 
-          return ListView(
-            children: <Widget>[
-              Container(
-                height: 80,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  border: const Border(
-                    bottom: BorderSide(color: Colors.black, width: 0.3),
-                  ),
-                ),
-                child: Center(
-                  child: Text('Entry A', style: TextStyle(color: textColor)),
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 80,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        border: const Border(
+                          bottom: BorderSide(color: Colors.black, width: 0.3),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Entry A',
+                          style: TextStyle(color: textColor),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 80,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        border: const Border(
+                          bottom: BorderSide(color: Colors.black, width: 0.3),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Entry B',
+                          style: TextStyle(color: textColor),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 80,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        border: const Border(
+                          bottom: BorderSide(color: Colors.black, width: 0.3),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Entry C',
+                          style: TextStyle(color: textColor),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                height: 80,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  border: const Border(
-                    bottom: BorderSide(color: Colors.black, width: 0.3),
+              // Fixed button at the bottom
+              // TODO: Change to fab button (right bottom corner at screen)
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      // TODO: Add board game
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Bordspel toevoegen'),
                   ),
-                ),
-                child: Center(
-                  child: Text('Entry B', style: TextStyle(color: textColor)),
-                ),
-              ),
-              Container(
-                height: 80,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  border: const Border(
-                    bottom: BorderSide(color: Colors.black, width: 0.3),
-                  ),
-                ),
-                child: Center(
-                  child: Text('Entry C', style: TextStyle(color: textColor)),
                 ),
               ),
             ],
