@@ -1,4 +1,6 @@
+import 'package:boardgame_database/components/header_component.dart';
 import 'package:boardgame_database/data/notifiers.dart';
+import 'package:boardgame_database/pages/add_edit_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,34 +14,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF9B7653),
-        title: const Text(
-          'Bordspellen overzicht',
-          style: TextStyle(color: Colors.white),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: HeaderComponent(
+          title: 'Bordspellen overzicht',
+          isHomePage: true,
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              isDarkModeNotifier.value = !isDarkModeNotifier.value;
-            },
-            icon: ValueListenableBuilder<bool>(
-              valueListenable: isDarkModeNotifier,
-              builder: (context, isDarkMode, child) {
-                return isDarkMode
-                    ? const Icon(Icons.dark_mode)
-                    : const Icon(Icons.light_mode);
-              },
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              // TODO: Hier straks database exporteren
-            },
-            icon: const Icon(Icons.exit_to_app),
-          ),
-        ],
       ),
       body: ValueListenableBuilder<bool>(
         valueListenable: isDarkModeNotifier,
@@ -54,8 +34,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: ListView(
-                  children: <Widget>[
-                    Container(
+                  children: List.generate(
+                    15, // TODO: Render list from db
+                    (index) => Container(
                       height: 80,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -66,65 +47,27 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Center(
                         child: Text(
-                          'Entry A',
+                          'Entry ${index + 1}',
                           style: TextStyle(color: textColor),
                         ),
                       ),
                     ),
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: const Border(
-                          bottom: BorderSide(color: Colors.black, width: 0.3),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Entry B',
-                          style: TextStyle(color: textColor),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: backgroundColor,
-                        border: const Border(
-                          bottom: BorderSide(color: Colors.black, width: 0.3),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Entry C',
-                          style: TextStyle(color: textColor),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Fixed button at the bottom
-              // TODO: Change to fab button (right bottom corner at screen)
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      // TODO: Add board game
-                    },
-                    icon: const Icon(Icons.add),
-                    label: const Text('Bordspel toevoegen'),
                   ),
                 ),
               ),
             ],
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddEditPage()),
+          ),
+        },
+        backgroundColor: Color(0xFF9B7653),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
