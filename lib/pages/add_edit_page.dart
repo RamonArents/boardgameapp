@@ -1,8 +1,18 @@
 import 'package:boardgame_database/components/header_component.dart';
+import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
 
-class AddEditPage extends StatelessWidget {
+class AddEditPage extends StatefulWidget {
   const AddEditPage({super.key});
+
+  @override
+  State<AddEditPage> createState() => _AddEditPageState();
+}
+
+class _AddEditPageState extends State<AddEditPage> {
+  final DatabaseService _databaseService = DatabaseService.instance;
+
+  String? _boardgame;
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +25,21 @@ class AddEditPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextField(
-              decoration: InputDecoration(
+              onChanged: (value) {
+                setState(() {
+                  _boardgame = value;
+                });
+              },
+              decoration: const InputDecoration(
                 labelText: 'Bordspel naam',
                 border: OutlineInputBorder(),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: FilledButton(
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFF9B7653),
@@ -33,9 +48,13 @@ class AddEditPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              onPressed: () => {},
-              // TODO: toevoegen of bewerken op basis van isEdit
-              child: Text("Toevoegen"),
+              onPressed: () {
+                final gameName = _boardgame?.trim();
+                if (gameName != null && gameName.isNotEmpty) {
+                  _databaseService.addBoardgame(gameName);
+                }
+              },
+              child: const Text('Toevoegen'),
             ),
           ),
         ],
