@@ -3,7 +3,9 @@ import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
 
 class AddEditPage extends StatefulWidget {
-  const AddEditPage({super.key});
+  final bool isEdit;
+
+  const AddEditPage({super.key, this.isEdit = false});
 
   @override
   State<AddEditPage> createState() => _AddEditPageState();
@@ -14,12 +16,16 @@ class _AddEditPageState extends State<AddEditPage> {
 
   String? _boardgame;
 
+  String get _buttonText => widget.isEdit ? 'Bewerken' : 'Toevoegen';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: HeaderComponent(title: 'Bordspel toevoegen'),
+        child: HeaderComponent(
+          title: widget.isEdit ? 'Bordspel bewerken' : 'Bordspel toevoegen',
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -54,7 +60,7 @@ class _AddEditPageState extends State<AddEditPage> {
                   _databaseService.addBoardgame(gameName);
                 }
               },
-              child: const Text('Toevoegen'),
+              child: Text(_buttonText),
             ),
           ),
         ],
