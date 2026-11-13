@@ -1,11 +1,15 @@
 import 'package:boardgame_database/components/header_component.dart';
+import 'package:boardgame_database/data/notifiers.dart';
 import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddEditPage extends StatefulWidget {
   final bool isEdit;
+  final int? id;
+  final String? name;
 
-  const AddEditPage({super.key, this.isEdit = false});
+  const AddEditPage({super.key, this.isEdit = false, this.id, this.name});
 
   @override
   State<AddEditPage> createState() => _AddEditPageState();
@@ -13,10 +17,42 @@ class AddEditPage extends StatefulWidget {
 
 class _AddEditPageState extends State<AddEditPage> {
   final DatabaseService _databaseService = DatabaseService.instance;
+  final TextEditingController _nameController = TextEditingController();
 
   String? _boardgame;
 
   String get _buttonText => widget.isEdit ? 'Bewerken' : 'Toevoegen';
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.name ?? '';
+    _boardgame = widget.name;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _addOrUpdateBoardgame() async {
+    final gameName = _boardgame?.trim();
+    if (gameName != null && gameName.isNotEmpty) {
+      if (widget.isEdit) {
+        if (widget.id != null) {
+          _databaseService.updateBoardgame(widget.id!, gameName);
+        }
+      } else {
+        _databaseService.addBoardgame(gameName);
+      }
+
+      await context.read<BoardgameProvider>().loadBoardgames();
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +69,7 @@ class _AddEditPageState extends State<AddEditPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextField(
+              controller: _nameController,
               onChanged: (value) {
                 setState(() {
                   _boardgame = value;
@@ -54,12 +91,7 @@ class _AddEditPageState extends State<AddEditPage> {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              onPressed: () {
-                final gameName = _boardgame?.trim();
-                if (gameName != null && gameName.isNotEmpty) {
-                  _databaseService.addBoardgame(gameName);
-                }
-              },
+              onPressed: _addOrUpdateBoardgame,
               child: Text(_buttonText),
             ),
           ),

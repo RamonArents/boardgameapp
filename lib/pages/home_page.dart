@@ -4,6 +4,7 @@ import 'package:boardgame_database/models/boardgame.dart';
 import 'package:boardgame_database/pages/add_edit_page.dart';
 import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,20 +41,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _boardgameList() {
-    return FutureBuilder(
-      future: _databaseService.getBoardGames(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('Fout bij het laden van bordspellen'),
-          );
-        }
-
-        final boardgames = snapshot.data ?? [];
+    return Consumer<BoardgameProvider>(
+      builder: (context, boardgameProvider, child) {
+        final boardgames = boardgameProvider.boardgames;
 
         return ValueListenableBuilder<bool>(
           valueListenable: isDarkModeNotifier,
@@ -83,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Expanded(
                         child: Text(
-                          boardgame.content,
+                          boardgame.name,
                           style: TextStyle(color: textColor),
                         ),
                       ),
@@ -97,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AddEditPage(isEdit: true),
+                              builder: (context) => AddEditPage(isEdit: true, id: boardgame.id, name: boardgame.name),
                             ),
                           );
                         },

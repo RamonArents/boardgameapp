@@ -1,10 +1,10 @@
 class Boardgame {
   final int id;
-  final String content;
+  final String name;
 
   Boardgame({
     required this.id,
-    required this.content,
+    required this.name,
   });
 }
 

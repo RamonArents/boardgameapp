@@ -38,9 +38,18 @@ class DatabaseService {
     return database;
   }
 
-  void addBoardgame(String content) async {
+  void addBoardgame(String name) async {
     final db = await database;
-    await db.insert(_boardgameTableName, {_boardgameNameColumnName: content});
+    await db.insert(_boardgameTableName, {_boardgameNameColumnName: name});
+  }
+
+  void updateBoardgame(int id, String name) async {
+    final db = await database;
+    await db.update(_boardgameTableName, {
+      _boardgameNameColumnName: name
+    },
+    where: "$_boardgameIdColumnName = ?",
+    whereArgs: [id]);
   }
 
   Future<List<Boardgame>> getBoardGames() async {
@@ -50,7 +59,7 @@ class DatabaseService {
         .map(
           (e) => Boardgame(
             id: e["id"] as int,
-            content: e["name"] as String,
+            name: e["name"] as String,
           ),
         )
         .toList();

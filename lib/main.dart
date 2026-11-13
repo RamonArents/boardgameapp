@@ -1,9 +1,15 @@
 import 'package:boardgame_database/data/notifiers.dart';
 import 'package:boardgame_database/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => BoardgameProvider()..loadBoardgames(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
