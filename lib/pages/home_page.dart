@@ -2,7 +2,6 @@ import 'package:boardgame_database/components/header_component.dart';
 import 'package:boardgame_database/data/notifiers.dart';
 import 'package:boardgame_database/models/boardgame.dart';
 import 'package:boardgame_database/pages/add_edit_page.dart';
-import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final DatabaseService _databaseService = DatabaseService.instance;
 
   @override
   Widget build(BuildContext context) {
