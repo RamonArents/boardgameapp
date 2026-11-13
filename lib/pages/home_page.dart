@@ -2,6 +2,7 @@ import 'package:boardgame_database/components/header_component.dart';
 import 'package:boardgame_database/data/notifiers.dart';
 import 'package:boardgame_database/models/boardgame.dart';
 import 'package:boardgame_database/pages/add_edit_page.dart';
+import 'package:boardgame_database/pages/delete_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,7 +85,11 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => AddEditPage(isEdit: true, id: boardgame.id, name: boardgame.name),
+                              builder: (context) => AddEditPage(
+                                isEdit: true,
+                                id: boardgame.id,
+                                name: boardgame.name,
+                              ),
                             ),
                           );
                         },
@@ -97,7 +101,15 @@ class _HomePageState extends State<HomePage> {
                         ),
                         tooltip: 'Verwijderen',
                         onPressed: () {
-                          // TODO: Delete this board game from the database
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return DeletePopup(
+                                id: boardgame.id,
+                                name: boardgame.name,
+                              );
+                            },
+                          );
                         },
                       ),
                     ],
