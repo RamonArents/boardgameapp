@@ -52,6 +52,11 @@ class DatabaseService {
     whereArgs: [id]);
   }
 
+  void deleteBoardgame(int id) async {
+    final db = await database;
+    await db.delete(_boardgameTableName, where: "$_boardgameIdColumnName = ?", whereArgs: [id]);
+  }
+
   Future<List<Boardgame>> getBoardGames() async {
     final db = await database;
     final data = await db.query(_boardgameTableName);

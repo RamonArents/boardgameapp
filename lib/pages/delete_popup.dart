@@ -1,4 +1,7 @@
+import 'package:boardgame_database/data/notifiers.dart';
+import 'package:boardgame_database/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DeletePopup extends StatefulWidget {
   final int? id;
@@ -11,12 +14,19 @@ class DeletePopup extends StatefulWidget {
 }
 
 class _DeletePopupState extends State<DeletePopup> {
-  late final String? _boardgameName;
+  final DatabaseService _databaseService = DatabaseService.instance;
 
   @override
   void initState() {
     super.initState();
-    _boardgameName = widget.name;
+  }
+
+  Future<void> handleDelete() async {
+    _databaseService.deleteBoardgame(widget.id!);
+    await context.read<BoardgameProvider>().loadBoardgames();
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -24,14 +34,13 @@ class _DeletePopupState extends State<DeletePopup> {
     return AlertDialog(
       title: Text("Verwijderen"),
       content: Text(
-        "Weet je zeker dat je het bordspel $_boardgameName wil verwijderen?",
+        "Weet je zeker dat je het bordspel ${widget.name} wil verwijderen?",
       ),
       actions: <Widget>[
         TextButton(
+          onPressed: handleDelete,
           child: Text('Verwijderen'),
-          onPressed: () => {
-            //TODO: Implement delete
-          },
+
         ),
         TextButton(
           child: Text('Annuleren'),
